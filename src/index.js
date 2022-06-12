@@ -46,10 +46,10 @@ function fileManager() {
                     break;
                 };
                 case "cd": {
-                    if (commandArray.length > 1) {
+                    if (commandArray.length > 0) {
                         cwd = path.join(cwd, commandArray.slice(1).join(' '));
                         const doesExistPath = await doesExist(cwd);
-                        console.log(doesExistPath);
+
                         if (doesExistPath) {
                             printCurrentDirectory();
                             try {

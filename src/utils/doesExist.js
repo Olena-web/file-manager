@@ -1,14 +1,15 @@
+import fs from 'fs';
 import path from 'path';
 
-export const doesExist = async (path) => {
+export const doesExist = async (pathDirectory) => {
     try {
-        await fs.stat(path);
+        await fs.promises.access(pathDirectory);
         return true;
-    } catch (err) {
+    } catch (error) {
+        console.error(error);
         return false;
     }
-};
-
+}
 export const doesPathAbsolute = (pathDirectory) => {
     path.isAbsolute(pathDirectory);
     // console.log(`path.isAbsolute(pathDirectory): ${path.isAbsolute(pathDirectory)}`);
