@@ -70,18 +70,11 @@ function fileManager() {
                     break;
                 }
                 case "up": {
-                    //console.log(`os.homedir(): ${os.homedir()}`);
                     if (cwd === os.homedir()) {
-                        process.stdout.write(`You are already in the root directory: ${os.homedir()}\n`);
+                        process.stdout.write(`${os.EOL}You are already in your root directory: ${os.homedir()}${os.EOL}Enter command or type "help":${os.EOL}`);
                     } else {
-                        cwd = path.join(cwd, '../');
-                        if (cwd === os.homedir()) {
-                            process.stdout.write(`You are already in the root directory: ${os.homedir()}\n`);
-                        } else {
-                            printCurrentDirectory();
-                            process.chdir(cwd);
-                            // process.stdout.write(`You are now in: ${cwd}\n`);
-                        }
+                        cwd = path.join(cwd, '..');
+                        process.chdir(cwd);
                     }
                     break;
                 }
