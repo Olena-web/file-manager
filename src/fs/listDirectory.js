@@ -6,6 +6,8 @@ export const listDirectory = async (dirPath) => {
         console.log(files);
     } catch (err) {
         throw new Error('FS operation failed');
+
     }
+    console.log(`listDirectory(): ${dirPath}`);
 };
 

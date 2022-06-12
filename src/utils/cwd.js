@@ -1,8 +1,6 @@
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 
-export const printCurrentDirectory = () => {
-    const __dirname = dirname(fileURLToPath(import.meta.url));
-    console.log(__dirname);
+export const printCurrentDirectory = (dirPath) => {
+    process.stdout.write(`You are now in: ${process.cwd(dirPath)}\n`);
 }
+
