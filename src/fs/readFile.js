@@ -1,21 +1,27 @@
-import fs from 'fs';
-import path from 'path';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { createReadStream } from 'fs';
+import { EOL } from 'os';
+import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
 
-export const read = async (dirPath) => {
-    try {
-        //const __dirname = dirname(fileURLToPath(import.meta.url));
-        //const filePath = path.join(__dirname, 'files/fileToRead.txt');
-        fs.readFile(dirPath, 'utf8', (err, data) => {
-            if (err || !filePath) {
-                console.log('FS operation failed');
-                throw new Error('FS operation failed');
-            }
-            console.log(data);
+
+export const read = async (filePath, cwd) => {
+    const absolutePath = getAbsolutePath(filePath, cwd);
+    const doesExistPath = await doesExist(absolutePath);
+    if (doesExistPath) {
+        try {
+            const readableStream = createReadStream(absolutePath, 'utf8');
+
+            readableStream.on('data', (chunk) => {
+                process.stdout.write(chunk);
+            })
+            readableStream.on('end', () => {
+                console.log(`You are now in: ${cwd}`);
+            });
+        } catch (error) {
+            console.log(`Operation failed!${EOL}${error}`);
+            console.log(`You are now in: ${cwd}`);
         }
-        );
-    } catch (err) {
-        throw new Error('FS operation failed');
+    } else {
+        process.stdout.write(`${EOL}No such file ${filePath} exists.${EOL}`);
+        console.log(`You are now in: ${cwd}`);
     }
 };

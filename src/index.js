@@ -51,21 +51,15 @@ function fileManager() {
                         const doesExistPath = await doesExist(cwd);
 
                         if (doesExistPath) {
-                            printCurrentDirectory();
-                            try {
-                                process.chdir('../');
-                                console.log("Working directory after changing"
-                                    + " directory: ", process.cwd());
-                            }
-                            catch (err) {
-                                console.log(err);
-                            }
-                            // process.chdir(cwd);
-                            process.stdout.write(`You are now in: ${cwd}\n`);
-                            //printCurrentDirectory();
+                            process.chdir(cwd);
+                            printCurrentDirectory(cwd);
                         } else {
-                            process.stdout.write(`No such directory ${cwd} exists.\nEnter your command or type "help":\n`);
+                            process.stdout.write(`${os.EOL}No such directory ${cwd} exists.${os.EOL}`);
+                            printCurrentDirectory(cwd);
                         }
+                    } else {
+                        process.stdout.write(`${os.EOL}Specify a valid directory after "cd".${os.EOL}`);
+                        printCurrentDirectory(cwd);
                     }
                     break;
                 }
@@ -79,20 +73,17 @@ function fileManager() {
                     break;
                 }
                 case "ls": {
-                    console.log(`cwd: ${cwd}`);
-                    await listDirectory(cwd).then((data) => {
-                        printCurrentDirectory();
-                    });
-                    // printCurrentDirectory(cwd);
+                    await listDirectory(cwd);
+                    printCurrentDirectory(cwd);
                     break;
                 }
                 case "cat": {
-                    if (args.length > 0) {
-                        const userPath = args.join(' ');
-                        await read(userPath, cwd);
+                    if (commandArray.length > 0) {
+                        const userPath = commandArray.join(' ');
+                        await read(userPath);
                     } else {
                         process.stdout.write(`${os.EOL}Specify a valid path after "cat".${os.EOL}`);
-                        commandClosingMsg(cwd);
+
                     };
                     break;
                 }

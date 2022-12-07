@@ -12,8 +12,13 @@ export const doesExist = async (pathDirectory) => {
 }
 export const doesPathAbsolute = (pathDirectory) => {
     path.isAbsolute(pathDirectory);
-    // console.log(`path.isAbsolute(pathDirectory): ${path.isAbsolute(pathDirectory)}`);
-    // return path.isAbsolute(pathDirectory);
+    return path.isAbsolute(pathDirectory);
 
 }
-doesPathAbsolute('/file-manager/src/utils/doesExist.js');
+export const getAbsolutePath = (pathDirectory, cwd) => {
+    if (doesPathAbsolute(pathDirectory)) {
+        return pathDirectory;
+    } else {
+        return path.join(cwd, pathDirectory);
+    }
+}
