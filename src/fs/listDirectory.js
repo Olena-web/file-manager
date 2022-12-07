@@ -16,6 +16,7 @@ export const listDirectory = async (dirPath) => {
     } catch (err) {
         throw new Error('FS operation failed');
     }
-    console.table(fileList);
+    const sortFiles = fileList.sort((a, b) => (a.Type).localeCompare(b.Type));
+    console.table(sortFiles);
 };
 

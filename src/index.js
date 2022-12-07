@@ -11,6 +11,7 @@ import { listDirectory } from './fs/listDirectory.js';
 import { printCurrentDirectory } from './utils/cwd.js';
 import { read } from './fs/readFile.js';
 import { compress } from './fs/compressBrotli.js';
+import { calculateHash } from './fs/hash.js';
 
 function fileManager() {
 
@@ -86,8 +87,33 @@ function fileManager() {
                     await read(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "cat".${os.EOL}`);
-                    commandClosingMsg(cwd);
+                    //commandClosingMsg(cwd);
                 };
+                break;
+            }
+            case "hash": {
+                try {
+                    if (commandArray.length > 0) {
+                        cwd = path.join(cwd, commandArray.slice(1).join(' '));
+                        const doesExistPath = await doesExist(cwd);
+                        if (doesExistPath) {
+                            try {
+                                await calculateHash(cwd);
+                            }
+
+                            catch (err) {
+                                console.log(err);
+                            }
+                        } else {
+                            process.stdout.write(`No such directory ${cwd} exists.\nEnter your command or type "help":\n`);
+                        }
+                    }
+
+                } catch (err) {
+                    console.log(err);
+                    process.stdout.write(`${os.EOL}Specify a valid path after "hash".${os.EOL}`);
+                }
+                //commandClosingMsg(cwd);
                 break;
             }
             case "compress": {
@@ -96,7 +122,7 @@ function fileManager() {
                     await compress(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "compress".${os.EOL}`);
-                    commandClosingMsg(cwd);
+                    //commandClosingMsg(cwd);
                 };
                 break;
             }
