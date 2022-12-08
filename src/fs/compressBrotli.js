@@ -10,7 +10,7 @@ export const compress = async (filePath, cwd) => {
     const doesExistPath = await doesExist(absolutePath);
     if (doesExistPath) {
         try {
-            const compressedFilePath = path.join(filePath + '.br');
+            const compressedFilePath = path.join(absolutePath + '.br');
             const readableStream = createReadStream(absolutePath);
             const writebleStream = createWriteStream(compressedFilePath);
             const brotli = zlib.createBrotliCompress();
