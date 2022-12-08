@@ -13,6 +13,7 @@ import { listDirectory } from './fs/listDirectory.js';
 import { printCurrentDirectory } from './utils/cwd.js';
 import { read } from './fs/readFile.js';
 import { compress } from './fs/compressBrotli.js';
+import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
 
 function fileManager() {
@@ -109,6 +110,16 @@ function fileManager() {
                     await compress(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "compress".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
+                break;
+            }
+            case "decompress": {
+                if (args.length > 0) {
+                    const userPath = args.join(' ');
+                    await decompress(userPath, cwd);
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "decompress".${os.EOL}`);
                     closeMessage(`${cwd}`);
                 };
                 break;
