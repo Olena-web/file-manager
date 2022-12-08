@@ -2,10 +2,12 @@
 
 import os from 'os';
 import process from 'process';
+import path from 'path';
+import readline from 'readline';
+
 import { userName } from './cli/parseStartArgs.js';
 import { help } from './utils/help.js';
-import readline from 'readline';
-import path from 'path';
+import { closeMessage } from './utils/closeMessage.js';
 import { doesExist } from './utils/doesExist.js';
 import { listDirectory } from './fs/listDirectory.js';
 import { printCurrentDirectory } from './utils/cwd.js';
@@ -31,8 +33,8 @@ function fileManager() {
 
     rl.on('line', async (line) => {
         const lineToString = line.toString().trim();
-        const commandArray = lineToString.split(" ");
-        switch (commandArray[0]) {
+        const [command, ...args] = lineToString.split(" ");
+        switch (command) {
             case ".exit": {
                 process.stdout.write(`Thank you for using File Manager, ${userName()}!`);
                 process.exit();
@@ -46,8 +48,8 @@ function fileManager() {
                 break;
             };
             case "cd": {
-                if (commandArray.length > 0) {
-                    cwd = path.join(cwd, commandArray.slice(1).join(' '));
+                if (args.length > 0) {
+                    cwd = path.join(cwd, args.join(' '));
                     const doesExistPath = await doesExist(cwd);
 
                     if (doesExistPath) {
@@ -57,7 +59,7 @@ function fileManager() {
                         catch (err) {
                             console.log(err);
                         }
-                        process.stdout.write(`You are now in: ${cwd}\n`);
+                        closeMessage(`${cwd}`);
                     } else {
                         process.stdout.write(`No such directory ${cwd} exists.\nEnter your command or type "help":\n`);
                     }
@@ -70,14 +72,14 @@ function fileManager() {
                 } else {
                     cwd = path.join(cwd, '..');
                     process.chdir(cwd);
-                    process.stdout.write(`You are now in: ${cwd}\n`);
+                    closeMessage(`${cwd}`);
                 }
                 break;
             }
             case "ls": {
                 console.log(`cwd: ${cwd}`);
                 await listDirectory(cwd);
-                process.stdout.write(`You are now in: ${cwd}\n`);
+                closeMessage(`${cwd}`);
 
                 break;
             }
@@ -87,33 +89,18 @@ function fileManager() {
                     await read(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "cat".${os.EOL}`);
-                    //commandClosingMsg(cwd);
+                    closeMessage(`${cwd}`);
                 };
                 break;
             }
             case "hash": {
-                try {
-                    if (commandArray.length > 0) {
-                        cwd = path.join(cwd, commandArray.slice(1).join(' '));
-                        const doesExistPath = await doesExist(cwd);
-                        if (doesExistPath) {
-                            try {
-                                await calculateHash(cwd);
-                            }
-
-                            catch (err) {
-                                console.log(err);
-                            }
-                        } else {
-                            process.stdout.write(`No such directory ${cwd} exists.\nEnter your command or type "help":\n`);
-                        }
-                    }
-
-                } catch (err) {
-                    console.log(err);
+                if (args.length > 0) {
+                    const userPath = args.join(' ');
+                    await calculateHash(userPath, cwd);
+                } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "hash".${os.EOL}`);
-                }
-                //commandClosingMsg(cwd);
+                    closeMessage(`${cwd}`);
+                };
                 break;
             }
             case "compress": {
@@ -122,13 +109,13 @@ function fileManager() {
                     await compress(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "compress".${os.EOL}`);
-                    //commandClosingMsg(cwd);
+                    closeMessage(`${cwd}`);
                 };
                 break;
             }
             default: {
                 process.stdout.write(`Invalid input, type "help" to see available commands.\n`);
-                console.log(`cwd: ${cwd}`);
+                closeMessage(`${cwd}`);
                 break;
             };
         };
