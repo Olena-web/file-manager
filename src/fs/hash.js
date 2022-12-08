@@ -21,7 +21,7 @@ export const calculateHash = async (filePath, cwd) => {
                 closeMessage(cwd);
             });
         } catch (error) {
-            console.log(`Operation failed!${EOL}${error}`);
+            process.stdout.write(`Operation failed!${EOL}${error}`);
             closeMessage(cwd);
         }
     } else {
