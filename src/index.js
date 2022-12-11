@@ -13,6 +13,7 @@ import { doesExist } from './utils/doesExist.js';
 import { listDirectory } from './fs/listDirectory.js';
 import { printCurrentDirectory } from './utils/cwd.js';
 import { read } from './fs/readFile.js';
+import { remove } from './fs/delete.js';
 import { compress } from './fs/compressBrotli.js';
 import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
@@ -91,6 +92,16 @@ function fileManager() {
                     await read(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "cat".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
+                break;
+            }
+            case "delete": {
+                if (args.length > 0) {
+                    const userPath = args.join(' ');
+                    await remove(userPath, cwd);
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "delete".${os.EOL}`);
                     closeMessage(`${cwd}`);
                 };
                 break;
