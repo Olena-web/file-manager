@@ -8,6 +8,7 @@ import readline from 'readline';
 import { userName } from './cli/parseStartArgs.js';
 import { help } from './utils/help.js';
 import { closeMessage } from './utils/closeMessage.js';
+import { processExit } from './utils/processExit.js';
 import { doesExist } from './utils/doesExist.js';
 import { listDirectory } from './fs/listDirectory.js';
 import { printCurrentDirectory } from './utils/cwd.js';
@@ -37,12 +38,10 @@ function fileManager() {
         const [command, ...args] = lineToString.split(" ");
         switch (command) {
             case ".exit": {
-                process.stdout.write(`Thank you for using File Manager, ${userName()}!`);
-                process.exit();
+                processExit();
             };
             case "exit": {
-                process.stdout.write(`Thank you for using File Manager, ${userName()}!`);
-                process.exit();
+                processExit();
             };
             case "help": {
                 help();
@@ -52,21 +51,23 @@ function fileManager() {
                 if (args.length > 0) {
                     cwd = path.join(cwd, args.join(' '));
                     const doesExistPath = await doesExist(cwd);
-
                     if (doesExistPath) {
-                        try {
-                            process.chdir('../');
-                        }
-                        catch (err) {
-                            console.log(err);
-                        }
-                        closeMessage(`${cwd}`);
+                        process.chdir(cwd);
+                        closeMessage(cwd);
+
                     } else {
-                        process.stdout.write(`No such directory ${cwd} exists.\nEnter your command or type "help":\n`);
+                        process.stdout.write(`${os.EOL}No such directory ${cwd} exists.${os.EOL}`);
+                        cwd = path.join(cwd, '..');
+                        closeMessage(cwd);
                     }
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid directory after "cd".${os.EOL}`);
+                    cwd = path.join(cwd, '..');
+                    closeMessage(cwd);
+
                 }
                 break;
-            }
+            };
             case "up": {
                 if (cwd === os.homedir()) {
                     process.stdout.write(`${os.EOL}You are already in your root directory: ${os.homedir()}${os.EOL}Enter command or type "help":${os.EOL}`);
