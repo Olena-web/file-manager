@@ -15,6 +15,7 @@ import { read } from './fs/readFile.js';
 import { remove } from './fs/delete.js';
 import { create } from './fs/create.js';
 import { rename } from './fs/rename.js';
+import { copy } from './fs/copy.js';
 import { compress } from './fs/compressBrotli.js';
 import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
@@ -126,6 +127,16 @@ function fileManager() {
                     break;
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "rn".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
+            }
+            case 'cp': {
+                if (args.length > 0) {
+                    const fileToCopy = args.join(' ');
+                    await copy(fileToCopy, cwd);
+                    break;
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "cp".${os.EOL}`);
                     closeMessage(`${cwd}`);
                 };
             }
