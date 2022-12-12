@@ -18,6 +18,7 @@ import { rename } from './fs/rename.js';
 import { compress } from './fs/compressBrotli.js';
 import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
+import { osData } from './os/osData.js';
 
 function fileManager() {
 
@@ -159,6 +160,17 @@ function fileManager() {
                 };
                 break;
             }
+            case "os": {
+                if (args.length > 0 && args[0].startsWith('--')) {
+                    const arg = args[0].slice(2);
+                    osData(arg);
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "os".${os.EOL}`);
+                }
+                closeMessage(`${cwd}`);
+                break;
+            };
+
             default: {
                 process.stdout.write(`Invalid input, type "help" to see available commands.\n`);
                 closeMessage(`${cwd}`);
