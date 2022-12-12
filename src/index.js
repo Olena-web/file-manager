@@ -13,6 +13,8 @@ import { doesExist } from './utils/doesExist.js';
 import { listDirectory } from './fs/listDirectory.js';
 import { read } from './fs/readFile.js';
 import { remove } from './fs/delete.js';
+import { create } from './fs/create.js';
+import { rename } from './fs/rename.js';
 import { compress } from './fs/compressBrotli.js';
 import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
@@ -105,6 +107,28 @@ function fileManager() {
                 };
                 break;
             }
+            case "create": {
+                if (args.length > 0) {
+                    const userPath = args.join(' ');
+                    await create(userPath, cwd);
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "create".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
+                break;
+            }
+            case 'rn': {
+                if (args.length === 2) {
+                    const fileToRename = args[0].toString();
+                    const newName = args[1].toString();
+                    console.log(fileToRename, newName);
+                    await rename(fileToRename, newName);
+                    break;
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "rn".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
+            }
             case "hash": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
@@ -128,7 +152,7 @@ function fileManager() {
             case "decompress": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
-                    await decompress(userPath, cwd);
+                    await decompress(userPath, cwd, destinationPath);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "decompress".${os.EOL}`);
                     closeMessage(`${cwd}`);
