@@ -14,6 +14,7 @@ import { listDirectory } from './fs/listDirectory.js';
 import { read } from './fs/readFile.js';
 import { remove } from './fs/delete.js';
 import { create } from './fs/create.js';
+import { rename } from './fs/rename.js';
 import { compress } from './fs/compressBrotli.js';
 import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
@@ -115,6 +116,18 @@ function fileManager() {
                     closeMessage(`${cwd}`);
                 };
                 break;
+            }
+            case 'rn': {
+                if (args.length === 2) {
+                    const fileToRename = args[0].toString();
+                    const newName = args[1].toString();
+                    console.log(fileToRename, newName);
+                    await rename(fileToRename, newName);
+                    break;
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "rn".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
             }
             case "hash": {
                 if (args.length > 0) {
