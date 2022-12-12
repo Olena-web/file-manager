@@ -11,9 +11,9 @@ import { closeMessage } from './utils/closeMessage.js';
 import { processExit } from './utils/processExit.js';
 import { doesExist } from './utils/doesExist.js';
 import { listDirectory } from './fs/listDirectory.js';
-import { printCurrentDirectory } from './utils/cwd.js';
 import { read } from './fs/readFile.js';
 import { remove } from './fs/delete.js';
+import { create } from './fs/create.js';
 import { compress } from './fs/compressBrotli.js';
 import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
@@ -106,6 +106,16 @@ function fileManager() {
                 };
                 break;
             }
+            case "create": {
+                if (args.length > 0) {
+                    const userPath = args.join(' ');
+                    await create(userPath, cwd);
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "create".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
+                break;
+            }
             case "hash": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
@@ -129,7 +139,7 @@ function fileManager() {
             case "decompress": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
-                    await decompress(userPath, cwd);
+                    await decompress(userPath, cwd, destinationPath);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "decompress".${os.EOL}`);
                     closeMessage(`${cwd}`);

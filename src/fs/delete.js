@@ -10,6 +10,7 @@ export const remove = async (filePath, cwd) => {
     if (doesExistPath) {
         try {
             await fs.rm((absolutePath), { force: false });
+            process.stdout.write(`${EOL}File ${filePath} deleted.${EOL}`);
             closeMessage(`${cwd}`);
 
         } catch (err) {

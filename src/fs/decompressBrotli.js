@@ -5,14 +5,15 @@ import { EOL } from 'os';
 import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
 import { closeMessage } from '../utils/closeMessage.js';
 
-export const decompress = async (filePath, cwd) => {
+export const decompress = async (filePath, cwd, destinationPath) => {
     const absolutePath = getAbsolutePath(filePath, cwd);
     const doesExistPath = await doesExist(absolutePath);
+    let newAbsolutePath = getAbsolutePath(destinationPath, cwd);
     if (doesExistPath) {
         try {
-            const decompressedFilePath = path.join(absolutePath.replace('.br', ''));
+            //const decompressedFilePath = path.join(absolutePath.replace('.br', ''));
             const readableStream = createReadStream(absolutePath);
-            const writebleStream = createWriteStream(decompressedFilePath);
+            const writebleStream = createWriteStream(newAbsolutePath);
             const brotli = zlib.createBrotliDecompress();
             const stream = readableStream.pipe(brotli).pipe(writebleStream);
             stream.on('finish', () => {
