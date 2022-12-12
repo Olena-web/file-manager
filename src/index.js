@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-import os from 'os';
+import os, { EOL } from 'os';
 import process from 'process';
 import path from 'path';
 import readline from 'readline';
@@ -30,9 +30,9 @@ function fileManager() {
         output: process.stdout
     });
 
-    process.stdout.write(`Welcome to the File Manager, ${userName()}!\n`);
-    process.stdout.write('Type "help" to see all available commands.\n');
-    process.stdout.write(`You are currently in: ${cwd}\nEnter your command:\n`);
+    process.stdout.write(`${EOL}Welcome to the File Manager, ${userName()}!${EOL}`);
+    process.stdout.write(`${EOL}Type "help" to see all available commands.${EOL}`);
+    process.stdout.write(`${EOL}You are currently in: ${cwd}${EOL}${EOL}Enter your command:${EOL}`);
 
 
 
@@ -108,10 +108,9 @@ function fileManager() {
                 };
                 break;
             }
-            case "create": {
+            case "add": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
-                    console.log(userPath);
                     await create(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "create".${os.EOL}`);
@@ -172,12 +171,12 @@ function fileManager() {
             };
 
             default: {
-                process.stdout.write(`Invalid input, type "help" to see available commands.\n`);
+                process.stdout.write(`${EOL}Invalid input, type "help" to see available commands.${EOL}`);
                 closeMessage(`${cwd}`);
                 break;
             };
         };
-    }).on('close', () => { console.log(`Thank you for using File Manager, ${userName()}!`) });
+    }).on('close', () => { process.stdout.write(`${EOL}Thank you for using File Manager, ${userName()}!${EOL}`) });
 };
 
 

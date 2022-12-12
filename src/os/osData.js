@@ -13,7 +13,7 @@ export const osData = (os_args) => {
         };
         case "cpus": {
             const cpuCores = os.cpus();
-            console.log(`Total CPU cores: ${cpuCores.length}`);
+            process.stdout.write(`Total CPU cores: ${cpuCores.length}`);
             cpuCores.map((item) => {
                 console.dir(item);
             });
