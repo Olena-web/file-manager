@@ -97,7 +97,7 @@ function fileManager() {
                 };
                 break;
             }
-            case "delete": {
+            case "rm": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
                     await remove(userPath, cwd);
@@ -110,6 +110,7 @@ function fileManager() {
             case "create": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
+                    console.log(userPath);
                     await create(userPath, cwd);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "create".${os.EOL}`);
@@ -121,8 +122,7 @@ function fileManager() {
                 if (args.length === 2) {
                     const fileToRename = args[0].toString();
                     const newName = args[1].toString();
-                    console.log(fileToRename, newName);
-                    await rename(fileToRename, newName);
+                    await rename(fileToRename, newName, cwd);
                     break;
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "rn".${os.EOL}`);

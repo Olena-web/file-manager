@@ -1,27 +1,21 @@
-import fs from 'fs/promises';
+import * as fs from 'fs/promises';
 import { EOL } from 'os';
 import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
+
 import { closeMessage } from '../utils/closeMessage.js';
-
-
-export const rename = async (fileToRename, newName) => {
+export const rename = async (fileToRename, newName, cwd) => {
     try {
-        const absolutePath = getAbsolutePath(fileToRename);
+        const absolutePath = getAbsolutePath(fileToRename, cwd);
         const doesExistPath = await doesExist(absolutePath);
-        const pathFileNew = path.join(cwd, newName);
-        fs.access(pathFileNew, fs.F_OK, (err) => {
-            if (err) {
-                fs.access(absolutePath, fs.F_OK, (err) => {
-                    if (err) {
-                        return console.log('FS operation failed');
-                    }
-                    return fs.rename(absolutePath, pathFileNew, () => { });
-                })
-                return;
-            }
-            return console.log('FS operation failed');
-        })
+        if (doesExistPath) {
+            await fs.rename(absolutePath, getAbsolutePath(newName, cwd));
+            process.stdout.write(`${EOL}File ${fileToRename} was successfully renamed to ${newName}${EOL}`);
+            closeMessage(cwd);
+        } else {
+            process.stdout.write(`${EOL}No such file ${fileToRename} exists!${EOL}`);
+            closeMessage(cwd);
+        }
     } catch (err) {
-        console.log(err);
+        console.error(`${EOL}Operation failed!${EOL}${err}`);
     }
-}
+};
