@@ -11,7 +11,6 @@ import { closeMessage } from './utils/closeMessage.js';
 import { processExit } from './utils/processExit.js';
 import { doesExist } from './utils/doesExist.js';
 import { listDirectory } from './fs/listDirectory.js';
-import { printCurrentDirectory } from './utils/cwd.js';
 import { read } from './fs/readFile.js';
 import { remove } from './fs/delete.js';
 import { compress } from './fs/compressBrotli.js';
