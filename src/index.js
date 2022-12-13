@@ -129,6 +129,7 @@ function fileManager() {
                     process.stdout.write(`${os.EOL}Specify a valid path after "rn".${os.EOL}`);
                     closeMessage(`${cwd}`);
                 };
+                break;
             }
             case 'cp': {
                 if (args.length > 0) {
@@ -139,6 +140,7 @@ function fileManager() {
                     process.stdout.write(`${os.EOL}Specify a valid path after "cp".${os.EOL}`);
                     closeMessage(`${cwd}`);
                 };
+                break;
             }
             case "hash": {
                 if (args.length > 0) {
