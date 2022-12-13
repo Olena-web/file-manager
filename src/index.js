@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 import os, { EOL } from 'os';
+import * as fs from 'fs/promises';
 import process from 'process';
 import path from 'path';
 import readline from 'readline';
@@ -20,6 +21,8 @@ import { compress } from './fs/compressBrotli.js';
 import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
 import { osData } from './os/osData.js';
+import { getAbsolutePath } from './utils/doesExist.js';
+
 
 function fileManager() {
 
@@ -123,12 +126,14 @@ function fileManager() {
                 if (args.length === 2) {
                     const fileToRename = args[0].toString();
                     const newName = args[1].toString();
-                    await rename(fileToRename, newName, cwd);
-                    break;
+                    await rename(fileToRename, newName, `${cwd}`);
+
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "rn".${os.EOL}`);
                     closeMessage(`${cwd}`);
                 };
+                break;
+
             }
             case 'cp': {
                 if (args.length > 0) {
@@ -139,6 +144,7 @@ function fileManager() {
                     process.stdout.write(`${os.EOL}Specify a valid path after "cp".${os.EOL}`);
                     closeMessage(`${cwd}`);
                 };
+                break;
             }
             case "hash": {
                 if (args.length > 0) {
@@ -187,7 +193,7 @@ function fileManager() {
                 break;
             };
         };
-    }).on('close', () => { process.stdout.write(`${EOL}Thank you for using File Manager, ${userName()}!${EOL}`) });
+    }).on('close', () => { process.stdout.write(`${EOL}Thank you for using File Manager, ${userName()}, goodbye!${EOL}`) });
 };
 
 
