@@ -3,7 +3,7 @@ import zlib from 'zlib';
 import path from 'path';
 import { EOL } from 'os';
 import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
-import { closeMessage } from '../utils/closeMessage.js';
+import { currentDirMessage } from '../utils/currentDirMessage.js';
 
 export const decompress = async (filePath, cwd, destinationPath) => {
     const absolutePath = getAbsolutePath(filePath, cwd);
@@ -18,13 +18,13 @@ export const decompress = async (filePath, cwd, destinationPath) => {
             const stream = readableStream.pipe(brotli).pipe(writebleStream);
             stream.on('finish', () => {
                 process.stdout.write(`${EOL} Done decompressing 😎`);
-                closeMessage(cwd);
+                currentDirMessage(cwd);
             }
             );
         } catch (error) {
             console.log(`Operation failed!${EOL}${error}`);
             console.log(`You are now in: ${cwd}`);
-            closeMessage(cwd);
+            currentDirMessage(cwd);
         }
     };
 };

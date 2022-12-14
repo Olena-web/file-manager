@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { createReadStream } from 'fs';
 import { EOL } from 'os';
 import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
-import { closeMessage } from '../utils/closeMessage.js';
+import { currentDirMessage } from '../utils/currentDirMessage.js';
 
 export const calculateHash = async (filePath, cwd) => {
     const absolutePath = getAbsolutePath(filePath, cwd);
@@ -18,15 +18,15 @@ export const calculateHash = async (filePath, cwd) => {
             })
             readableStream.on('end', () => {
                 process.stdout.write(`${EOL}Hash for the file: ${filePath} is: ${hashValue}${EOL}`);
-                closeMessage(cwd);
+                currentDirMessage(cwd);
             });
         } catch (error) {
             process.stdout.write(`Operation failed!${EOL}${error}`);
-            closeMessage(cwd);
+            currentDirMessage(cwd);
         }
     } else {
         process.stdout.write(`${EOL}No such file ${filePath} exists.${EOL}`);
-        closeMessage(cwd);
+        currentDirMessage(cwd);
     }
 };
 

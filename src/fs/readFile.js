@@ -1,7 +1,7 @@
 import { createReadStream } from 'fs';
 import { EOL } from 'os';
 import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
-import { closeMessage } from '../utils/closeMessage.js';
+import { currentDirMessage } from '../utils/currentDirMessage.js';
 
 
 export const read = async (filePath, cwd) => {
@@ -15,14 +15,14 @@ export const read = async (filePath, cwd) => {
                 process.stdout.write(chunk);
             })
             readableStream.on('end', () => {
-                closeMessage(`${cwd}`);
+                currentDirMessage(`${cwd}`);
             });
         } catch (error) {
             console.log(`Operation failed!${EOL}${error}`);
-            closeMessage(`${cwd}`);
+            currentDirMessage(`${cwd}`);
         }
     } else {
         process.stdout.write(`${EOL}No such file ${filePath} exists.${EOL}`);
-        closeMessage(`${cwd}`);
+        currentDirMessage(`${cwd}`);
     }
 };

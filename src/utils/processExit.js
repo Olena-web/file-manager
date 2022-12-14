@@ -1,7 +1,9 @@
-import os from 'os';
 import process from 'process';
+import { EOL } from 'os';
+import { userName } from '../cli/parseStartArgs.js';
+import { consoleColors } from './consoleColors.js';
 
 export const processExit = () => {
-    process.stdout.write(`${os.EOL}Thank you for using File Manager, ${userName()}!`);
-    process.exit();
+    console.log(consoleColors.cyan, `${EOL}Thank you for using File Manager, ${userName()}, goodbye!${EOL}`, consoleColors.reset),
+        process.exit(0)
 }

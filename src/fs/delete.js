@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import { EOL } from 'os';
 import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
-import { closeMessage } from '../utils/closeMessage.js';
+import { currentDirMessage } from '../utils/currentDirMessage.js';
 
 
 export const remove = async (filePath, cwd) => {
@@ -11,7 +11,7 @@ export const remove = async (filePath, cwd) => {
         try {
             await fs.rm((absolutePath), { force: false });
             process.stdout.write(`${EOL}File ${filePath} deleted.${EOL}`);
-            closeMessage(`${cwd}`);
+            currentDirMessage(`${cwd}`);
 
         } catch (err) {
             throw new Error(`${EOL}FS operation failed`);
@@ -19,6 +19,6 @@ export const remove = async (filePath, cwd) => {
     }
     else {
         process.stdout.write(`${EOL}No such file ${filePath} exists.${EOL}`);
-        closeMessage(`${cwd}`);
+        currentDirMessage(`${cwd}`);
     }
 };

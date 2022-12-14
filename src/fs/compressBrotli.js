@@ -3,7 +3,7 @@ import zlib from 'zlib';
 import path from 'path';
 import { EOL } from 'os';
 import { doesExist, getAbsolutePath } from '../utils/doesExist.js';
-import { closeMessage } from '../utils/closeMessage.js';
+import { currentDirMessage } from '../utils/currentDirMessage.js';
 
 export const compress = async (filePath, cwd) => {
     const absolutePath = getAbsolutePath(filePath, cwd);
@@ -17,11 +17,11 @@ export const compress = async (filePath, cwd) => {
             const stream = readableStream.pipe(brotli).pipe(writebleStream);
             stream.on('finish', () => {
                 process.stdout.write(`${EOL} Done compressing 😎`);
-                closeMessage(cwd);
+                currentDirMessage(cwd);
             });
         } catch (error) {
             process.stdout.write(`Operation failed!${EOL}${error}`);
-            closeMessage(cwd);
+            currentDirMessage(cwd);
             throw new Error('FS operation failed');
         }
     };

@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 import { EOL } from 'os';
 import process from 'process';
 import { getAbsolutePath } from '../utils/doesExist.js';
-import { closeMessage } from '../utils/closeMessage.js';
+import { currentDirMessage } from '../utils/currentDirMessage.js';
 
 export const create = async (filePath, cwd) => {
     const absolutePath = getAbsolutePath(filePath, cwd);
@@ -12,5 +12,5 @@ export const create = async (filePath, cwd) => {
     } catch (err) {
         process.stdout.write(`${EOL}Operation failed! ${err}${EOL}`);
     }
-    closeMessage(`${cwd}`);
+    currentDirMessage(`${cwd}`);
 }

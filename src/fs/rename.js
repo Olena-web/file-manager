@@ -1,6 +1,6 @@
 import * as fs from 'fs/promises';
 import { EOL } from 'os';
-import { closeMessage } from '../utils/closeMessage.js';
+import { currentDirMessage } from '../utils/currentDirMessage.js';
 import path from 'path';
 
 
@@ -9,7 +9,7 @@ export const rename = async (fileToRename, newName, cwd) => {
     const absoluteNewPath = path.join(`${cwd}`, newName);
     if (fileToRename === newName) {
         process.stdout.write(`${EOL}File ${fileToRename} already exists.${EOL}`);
-        closeMessage(`${cwd}`);
+        currentDirMessage(`${cwd}`);
         return;
     }
     if (await fs.access
@@ -17,7 +17,7 @@ export const rename = async (fileToRename, newName, cwd) => {
         .then(() => true)
         .catch(() => false)) {
         process.stdout.write(`${EOL}File ${newName} already exists.${EOL}`);
-        closeMessage(`${cwd}`);
+        currentDirMessage(`${cwd}`);
         return;
     }
     if (!await fs.access
@@ -25,16 +25,16 @@ export const rename = async (fileToRename, newName, cwd) => {
         .then(() => true)
         .catch(() => false)) {
         process.stdout.write(`${EOL}File ${fileToRename} does not exist.${EOL}`);
-        closeMessage(`${cwd}`);
+        currentDirMessage(`${cwd}`);
         return;
     }
 
     try {
         await fs.rename(absoluteOldPath, absoluteNewPath);
         process.stdout.write(`${EOL}File ${fileToRename} renamed successfully in ${newName}.${EOL}`);
-        closeMessage(`${cwd}`);
+        currentDirMessage(`${cwd}`);
     } catch (err) {
         process.stdout.write(`${EOL}Operation failed! ${err}${EOL}`);
-        closeMessage(`${cwd}`);
+        currentDirMessage(`${cwd}`);
     }
 }
