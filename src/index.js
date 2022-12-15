@@ -145,6 +145,17 @@ function fileManager() {
                 };
                 break;
             }
+            case "mv": {
+                if (args.length === 2) {
+                    const fileToMove = args[0].toString();
+                    const newDestination = args[1].toString();
+                    await move(fileToMove, newDestination, `${cwd}`);
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "mv".${os.EOL}`);
+                    closeMessage(`${cwd}`);
+                };
+                break;
+            }
             case "hash": {
                 if (args.length > 0) {
                     const userPath = args.join(' ');
