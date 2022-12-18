@@ -132,16 +132,39 @@ function fileManager() {
                     currentDirMessage(`${cwd}`);
                 };
                 break;
-
             }
             case 'cp': {
-                if (args.length > 0) {
-                    const fileToCopy = args.join(' ');
-                    await copy(fileToCopy, cwd);
+                console.log(args.length, args);
+                if (args.length === 2) {
+                    const fileToCopy = args[0].toString();
+                    const newDestination = args[1].toString();
+                    console.log(fileToCopy, newDestination);
+                    await copy(fileToCopy, newDestination, `${cwd}`);
                     break;
-                } else {
+                }
+                if (args.length === 1) {
+                    const fileToCopy = args[0].toString();
+                    const indexToInsert = fileToCopy.lastIndexOf('.');
+                    const newDestination = fileToCopy.slice(0, indexToInsert) + '_copy' + fileToCopy.slice(indexToInsert);
+
+                    await copy(fileToCopy, newDestination, `${cwd}`);
+                    break;
+                }
+
+                else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "cp".${os.EOL}`);
                     currentDirMessage(`${cwd}`);
+                };
+                break;
+            }
+            case "mv": {
+                if (args.length === 2) {
+                    const fileToMove = args[0].toString();
+                    const newDestination = args[1].toString();
+                    await move(fileToMove, newDestination);
+                } else {
+                    process.stdout.write(`${os.EOL}Specify a valid path after "mv".${os.EOL}`);
+                    closeMessage(`${cwd}`);
                 };
                 break;
             }
