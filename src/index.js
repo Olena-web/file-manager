@@ -10,7 +10,7 @@ import { userName } from './cli/parseStartArgs.js';
 import { help } from './utils/help.js';
 import { currentDirMessage } from './utils/currentDirMessage.js';
 import { processExit } from './utils/processExit.js';
-import { doesExist } from './utils/doesExist.js';
+import { doesExist, doesPathAbsolute } from './utils/doesExist.js';
 import { listDirectory } from './fs/listDirectory.js';
 import { read } from './fs/readFile.js';
 import { remove } from './fs/delete.js';
@@ -134,12 +134,39 @@ function fileManager() {
                 break;
             }
             case 'cp': {
-                console.log(args.length, args);
-                if (args.length === 2) {
-                    const fileToCopy = args[0].toString();
-                    const newDestination = args[1].toString();
-                    console.log(fileToCopy, newDestination);
-                    await copy(fileToCopy, newDestination, `${cwd}`);
+
+                if (args.length >= 2) {
+                    let paths = [];
+
+                    for (let i = 0; i < args.length - 1; i++) {
+                        let filePath = args[i].toString();
+                        const pathObj = path.parse(filePath);
+                        if (pathObj.ext === '') {
+                            filePath = (args[i].toString() + " " + args[i + 1].toString()),
+                                i++;
+                            if (filePath.includes('.')) {
+                                paths.push(filePath);
+
+                            }
+                        }
+                        if (pathObj.ext !== '') {
+                            filePath = filePath;
+                            paths.push(filePath);
+                        }
+                    }
+                    console.log(paths);
+                    if (paths.length === 1) {
+                        const fileToCopy = paths[0].toString();
+                        const indexToInsert = fileToCopy.lastIndexOf('.');
+                        const newDestination = fileToCopy.slice(0, indexToInsert) + '_copy' + fileToCopy.slice(indexToInsert);
+                        await copy(fileToCopy, newDestination, `${cwd}`);
+                    }
+                    if (paths.length === 2) {
+                        const fileToCopy = paths[0].toString();
+                        const newDestination = paths[1].toString();
+                        await copy(fileToCopy, newDestination, `${cwd}`);
+                    }
+
                     break;
                 }
                 if (args.length === 1) {
@@ -164,7 +191,7 @@ function fileManager() {
                     await move(fileToMove, newDestination);
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "mv".${os.EOL}`);
-                    closeMessage(`${cwd}`);
+                    currentDirMessage(`${cwd}`);
                 };
                 break;
             }
