@@ -122,6 +122,37 @@ function fileManager() {
                 break;
             }
             case 'rn': {
+                if (args.length >= 2) {
+                    let names = [];
+
+                    for (let i = 0; i < args.length - 1; i++) {
+                        let fileToRename = args[i].toString();
+                        const pathObj = path.parse(fileToRename);
+                        if (pathObj.ext === '') {
+                            fileToRename = (args[i].toString() + " " + args[i + 1].toString()),
+                                i++;
+                            if (fileToRename.includes('.')) {
+                                names.push(fileToRename);
+                            }
+                        }
+                        if (pathObj.ext !== '') {
+                            fileToRename = fileToRename;
+                            names.push(fileToRename);
+                        }
+                    }
+                    if (names.length === 1) {
+                        const fileToRename = names[0].toString();
+                        const newName = fileToRename
+                        await copy(fileToRename, newName, `${cwd}`);
+                    }
+                    if (names.length === 2) {
+                        const fileToRename = names[0].toString();
+                        const newName = names[1].toString();
+                        await rename(fileToRename, newName, `${cwd}`);
+                    }
+
+                    break;
+                }
                 if (args.length === 2) {
                     const fileToRename = args[0].toString();
                     const newName = args[1].toString();
@@ -146,7 +177,6 @@ function fileManager() {
                                 i++;
                             if (filePath.includes('.')) {
                                 paths.push(filePath);
-
                             }
                         }
                         if (pathObj.ext !== '') {
@@ -154,7 +184,6 @@ function fileManager() {
                             paths.push(filePath);
                         }
                     }
-                    console.log(paths);
                     if (paths.length === 1) {
                         const fileToCopy = paths[0].toString();
                         const indexToInsert = fileToCopy.lastIndexOf('.');
