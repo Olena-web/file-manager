@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
 import { EOL } from 'os';
-import { getAbsolutePath, doesExist } from '../utils/doesExist.js';
+import { getAbsolutePath } from '../utils/doesExist.js';
 import { currentDirMessage } from '../utils/currentDirMessage.js';
 
 export const copy = async (fileToCopy, newDestination, cwd) => {

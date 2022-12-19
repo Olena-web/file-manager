@@ -22,6 +22,7 @@ import { decompress } from './fs/decompressBrotli.js';
 import { calculateHash } from './fs/hash.js';
 import { osData } from './os/osData.js';
 import { consoleColors } from './utils/consoleColors.js';
+import { concatPaths } from './utils/concatPaths.js';
 
 
 function fileManager() {
@@ -235,9 +236,35 @@ function fileManager() {
                 break;
             }
             case "compress": {
-                if (args.length > 0) {
-                    const userPath = args.join(' ');
-                    await compress(userPath, cwd);
+                let paths = [];
+                if (args.length >= 2) {
+                    for (let i = 0; i < args.length - 1; i++) {
+                        let filePath = args[i].toString();
+                        const pathObj = path.parse(filePath);
+                        if (pathObj.ext === '') {
+                            filePath = (args[i].toString() + " " + args[i + 1].toString()),
+                                i++;
+                            if (filePath.includes('.')) {
+                                paths.push(filePath);
+                            }
+                        }
+                        if (pathObj.ext !== '') {
+                            filePath = filePath;
+                            paths.push(filePath);
+                        }
+
+                        if (paths.length === 1) {
+                            const filePath = paths[0].toString();
+                            const newDestination = filePath;
+                            await compress(filePath, newDestination, `${cwd}`);
+                        }
+                        if (paths.length === 2) {
+                            const filePath = paths[0].toString();
+                            const newDestination = paths[1].toString();
+                            await compress(filePath, newDestination, `${cwd}`)
+                        }
+                        break;
+                    }
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "compress".${os.EOL}`);
                     currentDirMessage(`${cwd}`);
@@ -245,9 +272,13 @@ function fileManager() {
                 break;
             }
             case "decompress": {
-                if (args.length > 0) {
-                    const userPath = args.join(' ');
-                    await decompress(userPath, cwd, destinationPath);
+                if (args.length === 2) {
+
+                    const filePath = args[0].toString();
+                    const destinationPath = args[1].toString();
+                    console.log(filePath, destinationPath);
+                    await decompress(filePath, destinationPath, `${cwd}`);
+
                 } else {
                     process.stdout.write(`${os.EOL}Specify a valid path after "decompress".${os.EOL}`);
                     currentDirMessage(`${cwd}`);
